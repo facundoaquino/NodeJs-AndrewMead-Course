@@ -1,13 +1,70 @@
 const express = require('express')
 const app = express()
+const path = require('path')
+const hbs = require('hbs')
 
+//define paths for express config
+const publicDirectoryPath = path.join(__dirname, '../public')
+const viewsPath = path.join(__dirname, '../templates/views')
+const partialPath = path.join(__dirname, '../templates/partials')
 
-app.get('',(req,res)=>{
-    res.send('Hello Express!1')
+//setup handlebars enfine and views location
+app.set('view engine', 'hbs')
+app.set('views', viewsPath)
+hbs.registerPartials(partialPath)
+
+//setup static directory to serve
+app.use(express.static(publicDirectoryPath))
+app.get('', (req, res) => {
+	res.render('index', {
+		title: 'Wheather App ',
+		name: 'Facu Aquino',
+	})
 })
 
+app.get('/about', (req, res) => {
+	res.render('about', {
+		title: 'About',
+		name: 'Facu Aquino',
+	})
+})
 
+app.get('/help', (req, res) => {
+	res.render('help', {
+		helpText: 'This is some helpfu text',
+		title: 'Help',
+		name: 'Facu Aquino',
+	})
+})
 
-app.listen(3000,()=>{
-    console.log('Service server online')
+app.get('/weather', (req, res) => {
+	if (!req.query.address) {
+		res.send({
+			error: 'you must enter a correct adreess to search the weather',
+		})
+	} else {
+		res.send({
+			address: req.query.address,
+		})
+	}
+})
+
+app.get('/help/*', (req, res) => {
+	res.render('404', {
+		title: '404',
+		name: 'facu aquino',
+		message: 'Help article not found',
+	})
+})
+
+app.get('*', (req, res) => {
+	res.render('404', {
+		title: '404',
+		name: 'facu aquino',
+		message: 'Page not found',
+	})
+})
+
+app.listen(3000, () => {
+	console.log('Service server online')
 })

@@ -10,7 +10,6 @@ const $img = document.getElementById('imgCountry')
 // print-data with data at fetch
 
 const printData = async ({ error, location, temperature, country }) => {
-
 	if (error) {
 		$temperature.innerHTML = error
 		$location.innerHTML = ''
@@ -27,7 +26,6 @@ const printData = async ({ error, location, temperature, country }) => {
 }
 
 // const response = await fetch('http://api.allorigins.win/get?url=https://flagcdn.com/en/codes.json')
-
 
 const returnCountryCode = async (country) => {
 	const response = await fetch('https://cors-anywhere.herokuapp.com/https://flagcdn.com/en/codes.json')
@@ -53,8 +51,8 @@ const returnCountryCode = async (country) => {
 $searchForm.addEventListener('submit', (e) => {
 	e.preventDefault()
 	$temperature.innerHTML = 'Loading...'
-		$location.innerHTML = ''
-		$img.removeAttribute('src')
+	$location.innerHTML = ''
+	$img.removeAttribute('src')
 	const data = new FormData($searchForm)
 
 	const location = data.get('location')

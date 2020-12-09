@@ -26,10 +26,13 @@ const printData = async ({ error, location, temperature, country }) => {
 	}
 }
 
+// const response = await fetch('http://api.allorigins.win/get?url=https://flagcdn.com/en/codes.json')
+
+
 const returnCountryCode = async (country) => {
-	const response = await fetch('http://api.allorigins.win/get?url=https://flagcdn.com/en/codes.json')
+	const response = await fetch('https://cors-anywhere.herokuapp.com/https://flagcdn.com/en/codes.json')
 	const data = await response.json()
-	const countriesEntries = Object.entries(JSON.parse(data.contents))
+	const countriesEntries = Object.entries(data)
 
 	//save a country iteranting entries
 
@@ -56,7 +59,7 @@ $searchForm.addEventListener('submit', (e) => {
 
 	const location = data.get('location')
 	if (location) {
-		fetch(`http://localhost:3000/weather?address=${location}`)
+		fetch(`/weather?address=${location}`)
 			.then((res) => res.json())
 			.then((data) => {
 				printData(data)

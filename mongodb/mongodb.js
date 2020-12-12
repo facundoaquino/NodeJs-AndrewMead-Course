@@ -1,3 +1,5 @@
+// este es el primer archivo de mongodb estaba en la carpeta de task-manager , antes de ver mongoose
+
 // Crud create read update deleate
 
 // const mongodb = require('mongodb')

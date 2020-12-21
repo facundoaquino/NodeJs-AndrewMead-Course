@@ -3,7 +3,11 @@
 const mongoose = require('mongoose')
 const validator = require('validator')
 
-const User = mongoose.model('User', {
+const bcrypt = require('bcryptjs')
+
+//-----------hay que crear un schema para sacar provecho de los middlewares
+
+const userSchema = new mongoose.Schema({
 	//con required podemos obviar la edad pero si o si tenemos que pasar un name
 
 	name: {
@@ -43,5 +47,21 @@ const User = mongoose.model('User', {
 		},
 	},
 })
+
+//-----------validamos con un middleware pre , para que valida antes de guardar en este caso un usuario
+//-----------el callback no puede ser arrow function porque hace uso del contexto this
+
+userSchema.pre('save', async function (next) {
+	const user = this
+
+	//-----------hass password
+
+	if (user.isModified('password')) {
+		user.password = await bcrypt.hash(user.password, 8)
+	}
+	next()
+})
+
+const User = mongoose.model('User', userSchema)
 
 module.exports = User

@@ -10,6 +10,12 @@ mongoose.connect('mongodb://127.0.0.1:27017/task-manager-api', {
 	useFindAndModify: false,
 })
 
+/*---------------------- prbando evento open con moongose ---------------------*/
+
+mongoose.connection.on('open', () => {
+	console.log('Database is connected')
+})
+
 //PAQUETE VALIDATOR MUY RECOMENDADO Y POPULAR PARA HACER VALIDACIONES ( npm install validator)
 
 // const validator = require('validator')

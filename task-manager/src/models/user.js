@@ -2,6 +2,7 @@
 
 const mongoose = require('mongoose')
 const validator = require('validator')
+const jwt = require('jsonwebtoken')
 
 const bcrypt = require('bcryptjs')
 
@@ -26,6 +27,7 @@ const userSchema = new mongoose.Schema({
 	},
 	email: {
 		type: String,
+		unique: true,
 		required: true,
 		trim: true,
 		lowercase: true,
@@ -46,11 +48,59 @@ const userSchema = new mongoose.Schema({
 			}
 		},
 	},
+	tokens: [
+		{
+			token: {
+				type: String,
+				required: true,
+			},
+		},
+	],
 })
+/*---------------------- seteando un nuevo metodo en el schema user , usa this por eso no se usa arrow function ---------------------*/
+
+//validation con token json
+userSchema.methods.generateAuthToken = async function () {
+	const user = this
+	const token = jwt.sign({ _id: user._id.toString() }, 'andrewcourse')
+
+	user.tokens = user.tokens.concat({ token })
+
+	await user.save()
+	return token
+}
+
+userSchema.methods.toJSON= function(){
+	const user = this
+	const userObject = user.toObject()
+	delete userObject.password
+	delete userObject.tokens
+	return userObject
+}
+
+
+/*---------------------- creando metodos staticos con userSchema.statics ---------------------*/
+
+userSchema.statics.findByCredentials = async (email, password) => {
+	const user = await User.findOne({ email: email })
+
+	if (!user) {
+		throw new Error('unable to login')
+	}
+
+	const isMatch = await bcrypt.compare(password, user.password)
+
+	if (!isMatch) {
+		throw new Error('Unable to login')
+	}
+
+	return user
+}
 
 //-----------validamos con un middleware pre , para que valida antes de guardar en este caso un usuario
 //-----------el callback no puede ser arrow function porque hace uso del contexto this
 
+//hash password middleware
 userSchema.pre('save', async function (next) {
 	const user = this
 

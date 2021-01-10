@@ -14,6 +14,9 @@ const port = process.env.PORT || 3000
 
 const userRouter = require('./routers/user')
 const taskRouter = require('./routers/task')
+
+/*---------------------- setup middlewares ---------------------*/
+
 // parse json data
 
 app.use(express.json())

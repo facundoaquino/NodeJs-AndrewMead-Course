@@ -6,7 +6,6 @@ require('./db/mongoose')
 // import de user model and task
 
 const Task = require('./models/task')
-const User = require('./models/user')
 
 const port = process.env.PORT || 3000
 
@@ -31,3 +30,6 @@ app.use(taskRouter)
 app.listen(port, () => {
 	console.log('Server is up on port ' + port)
 })
+
+ 
+

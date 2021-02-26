@@ -57,6 +57,15 @@ const userSchema = new mongoose.Schema({
 		},
 	],
 })
+
+/*---------------------- seteamos relacion de user y task , es un propiedad virtual---------------------*/
+
+userSchema.virtual('tasks', {
+	ref: 'Task',
+	localField: '_id',
+	foreignField: 'owner',
+})
+
 /*---------------------- seteando un nuevo metodo en el schema user , usa this por eso no se usa arrow function ---------------------*/
 
 //validation con token json
@@ -70,14 +79,13 @@ userSchema.methods.generateAuthToken = async function () {
 	return token
 }
 
-userSchema.methods.toJSON= function(){
+userSchema.methods.toJSON = function () {
 	const user = this
 	const userObject = user.toObject()
 	delete userObject.password
 	delete userObject.tokens
 	return userObject
 }
-
 
 /*---------------------- creando metodos staticos con userSchema.statics ---------------------*/
 

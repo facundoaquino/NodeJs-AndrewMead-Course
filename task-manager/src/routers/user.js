@@ -123,7 +123,7 @@ router.delete('/users/me',auth, async (req, res) => {
 
 		await req.user.remove()
 
-		res.send(user)
+		res.send(req.user)
 	} catch (error) {
 		res.status(500).send(error)
 	}
